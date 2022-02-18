@@ -12,13 +12,14 @@
 			gap: 2em;
 			margin: 0;
 			overflow: hidden;
-			height: 100vh
+			height: 100vh;
+			padding: 1em
 		}
 		.wrp {
 			display: grid;
 			grid-template-columns: 1fr auto 1fr;
 			place-items: center;
-			gap: 5em;
+			gap: 2em;
 			width: auto;
 			margin: 0 auto;
 		}
@@ -45,6 +46,12 @@
 			text-align: center;
 			font-size: 10px;
 			opacity: .2
+		}
+		
+		@media (max-width: 1000px) {
+			.wrp {
+				grid-template-columns: 1fr
+			}
 		}
 	</style>
 	<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
