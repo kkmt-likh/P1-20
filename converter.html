@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Converter</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+		body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 2em;
+			margin: 0;
+			overflow: hidden;
+			height: 100vh
+		}
+		.wrp {
+			display: grid;
+			grid-template-columns: 1fr auto 1fr;
+			place-items: center;
+			gap: 5em;
+			width: auto;
+			margin: 0 auto;
+		}
+		#l-base, #r-base {
+			vertical-align: -1em;
+			width: 3em
+		}
+		input.error {
+			border-color: #F00
+		}
+		.controls {
+			display: flex;
+			flex-direction: column;
+			gap: .5em
+		}
+		.controls button {
+			padding: 0 1em
+		}
+		input, button {
+			font-size: 30px;
+			font-family: 'Fira Code', monospace
+		}
+		#signature {
+			text-align: center;
+			font-size: 10px;
+			opacity: .2
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="wrp">
+	<div class="left">
+		<input type="text" id="l-num" placeholder="Левое число">
+		<input type="number" min="2" max="36" id="l-base" value="10" placeholder="осн.">
+	</div>
+	<div class="controls">
+		<button id="ltr" title="Перевести число слева направо">→</button>
+		<button id="rtl" title="Перевести число справа налево">←</button>
+	</div>
+	<div class="right">
+		<input type="text" id="r-num" placeholder="Правое число">
+		<input type="number" min="2" max="36" id="r-base" value="10" placeholder="осн.">
+	</div>
+	</div>
+	<span id="signature">by Kofirs2634, 2022</span>
+
+	<script>
+		$('#ltr').bind('click', () => {
+			// получаем данные
+			const lNum = $('#l-num').val()
+			const lBase = parseInt($('#l-base').val()) || -1
+			const rBase = parseInt($('#r-base').val()) || -1
+			
+			// защита от тестировщика
+			if (lBase < 2 || lBase > 36) return highlightError('#l-base')
+			if (rBase < 2 || rBase > 36) return highlightError('#r-base')
+
+			// считаем число и проверяем на валидность
+			const result = parseInt(lNum, lBase).toString(rBase)
+			if (!lNum || result.toString() == 'NaN') return highlightError('#l-num')
+			
+			// выводим
+			$('#r-num').val(result)
+		})
+
+		$('#rtl').bind('click', () => {
+			// здесь все то же самое
+			// (см. хандлер выше)
+			const rNum = $('#r-num').val()
+			const rBase = parseInt($('#r-base').val()) || -1
+			const lBase = parseInt($('#l-base').val()) || -1
+			
+			if (lBase < 2 || lBase > 36) return highlightError('#l-base')
+			if (rBase < 2 || rBase > 36) return highlightError('#r-base')
+
+			const result = parseInt(rNum, rBase).toString(lBase)
+			if (!rNum || result.toString() == 'NaN') return highlightError('#r-num')
+			
+			$('#l-num').val(result)
+		})
+
+		/**
+		 * Подсвечивает выбранный инпут красным - знак ошибки
+		 * @param {string} selector Селектор инпута
+		 */
+		function highlightError(selector) {
+			$(selector).addClass('error')
+			setTimeout(() => {
+				$(selector).removeClass('error')
+			}, 2000)
+		}
+	</script>
+</body>
+</html>
